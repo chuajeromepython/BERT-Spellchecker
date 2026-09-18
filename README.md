@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/🤖-BERT--Spellchecker-2b2b2b?style=for-the-badge&labelColor=1a1a1a" alt="BERT-Spellchecker" height="60">
+  <img src="https://karmajack.com/wp-content/uploads/2019/12/Google-BERT-What-you-probably-didnt-know-about-the-AI.png" alt="BERT-Spellchecker" height="60">
 </p>
 
 <p align="center">OCR text correction: SymSpell segmentation + BERT contextual reranking</p>
