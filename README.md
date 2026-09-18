@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://karmajack.com/wp-content/uploads/2019/12/Google-BERT-What-you-probably-didnt-know-about-the-AI.png" alt="BERT-Spellchecker" height="100" width="400">
+  <img src="https://karmajack.com/wp-content/uploads/2019/12/Google-BERT-What-you-probably-didnt-know-about-the-AI.png" alt="BERT-Spellchecker" height="60" width="400">
 </p>
 
 <p align="center">OCR text correction: SymSpell segmentation + BERT contextual reranking</p>
