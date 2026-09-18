@@ -1,4 +1,16 @@
-# BERT-Spellchecker
+<p align="center">
+  <img src="https://img.shields.io/badge/🤖-BERT--Spellchecker-2b2b2b?style=for-the-badge&labelColor=1a1a1a" alt="BERT-Spellchecker" height="60">
+</p>
+
+<p align="center">OCR text correction: SymSpell segmentation + BERT contextual reranking</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.9%2B-blue?style=flat-square" alt="python version">
+  <img src="https://img.shields.io/badge/model-bert--base--uncased-yellow?style=flat-square" alt="model">
+  <img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square" alt="license">
+</p>
+
+---
 
 A standalone text corrector for OCR output. It's a two-stage pipeline:
 
