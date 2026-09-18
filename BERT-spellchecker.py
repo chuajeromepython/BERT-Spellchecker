@@ -118,6 +118,9 @@ def build_symspell():
     return sym_spell
 
 
+FINETUNED_MODEL_DIR = os.path.join(SCRIPT_DIR, "finetuned-bert-spellchecker")
+
+
 def build_bert_scorer():
     # Plain transformers, not contextualSpellCheck -- we need direct
     # access to masked-position logits to SCORE specific candidate
@@ -125,12 +128,19 @@ def build_bert_scorer():
     # token even a known word" gate (see module docstring). BERT is an
     # encoder used here purely as a probability scorer, not a
     # generative/decoder LLM.
-    print("Loading BERT (bert-base-uncased) for contextual scoring...")
     import torch
     from transformers import AutoTokenizer, AutoModelForMaskedLM
 
-    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-    model = AutoModelForMaskedLM.from_pretrained("bert-base-uncased")
+    if os.path.isdir(FINETUNED_MODEL_DIR):
+        model_source = FINETUNED_MODEL_DIR
+        print(f"Loading fine-tuned BERT from {FINETUNED_MODEL_DIR} for contextual scoring...")
+    else:
+        model_source = "bert-base-uncased"
+        print("Loading BERT (bert-base-uncased) for contextual scoring...")
+        print("(No fine-tuned model found -- run finetune_bert.py to train one on your data.)")
+
+    tokenizer = AutoTokenizer.from_pretrained(model_source)
+    model = AutoModelForMaskedLM.from_pretrained(model_source)
     model.eval()
     return tokenizer, model, torch
 
