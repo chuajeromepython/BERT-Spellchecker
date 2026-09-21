@@ -1,0 +1,142 @@
+[
+    {
+        "id": "typo_basic_1",
+        "category": "common_typo",
+        "input": "The systm intgrates wtih the databse to manage studnet records.",
+        "expected": "The system integrates with the database to manage student records.",
+        "notes": "Plain typos only, no domain vocab, no ambiguity -- should be easy."
+    },
+    {
+        "id": "typo_basic_2",
+        "category": "common_typo",
+        "input": "Plese chekc the atatched fiel for erors before submiting.",
+        "expected": "Please check the attached file for errors before submitting.",
+        "notes": "Plain typos only."
+    },
+    {
+        "id": "real_word_error_1",
+        "category": "real_word_error",
+        "input": "The team deploid it using the new server.",
+        "expected": "The team deployed it using the new server.",
+        "notes": "Known tricky case: 'deploid' is edit-distance-close to the real word 'diploid', not just 'deployed'. Tests whether Stage 2 recovers the intended word."
+    },
+    {
+        "id": "real_word_error_2",
+        "category": "real_word_error",
+        "input": "She wondered weather the plan would succeed.",
+        "expected": "She wondered whether the plan would succeed.",
+        "notes": "'weather' is a real, correctly-spelled word -- SymSpell alone won't flag it. Pure Stage 2 test."
+    },
+    {
+        "id": "domain_vocab_1",
+        "category": "domain_vocab",
+        "input": "The STARS systm intgrates wtih iStar to manage studnet records.",
+        "expected": "The STARS system integrates with ISTAR to manage student records.",
+        "notes": "Domain terms should survive; note iStar is expected to come out as ISTAR (all caps) -- known casing behavior, not a failure."
+    },
+    {
+        "id": "domain_vocab_2",
+        "category": "domain_vocab",
+        "input": "We deploid it using Xampp for locl testing.",
+        "expected": "We deployed it using XAMPP for local testing.",
+        "notes": "Combines the deploid ambiguity with a domain term (Xampp) in the same sentence."
+    },
+    {
+        "id": "domain_vocab_3",
+        "category": "domain_vocab",
+        "input": "The API was built with php and laravel, and tested using postman.",
+        "expected": "The API was built with PHP and laravel, and tested using postman.",
+        "notes": "php is <=6 chars so should be force-uppercased; laravel (7 chars) and postman (not in vocab) should NOT be."
+    },
+    {
+        "id": "domain_vocab_4",
+        "category": "domain_vocab",
+        "input": "We used paddleocr and trocr to extract text before running it through github actions.",
+        "expected": "We used paddleocr and TROCR to extract text before running it through GITHUB actions.",
+        "notes": "paddleocr (9 chars) stays lowercase; trocr and github (both <=6 chars) get uppercased -- the casing pass applies to every matching vocab token in the sentence, not just ones Stage 1 changed."
+    },
+    {
+        "id": "merged_word_1",
+        "category": "segmentation",
+        "input": "Pleasesubmit yourassignment beforethe deadline.",
+        "expected": "Please submit your assignment before the deadline.",
+        "notes": "Merged/joined words -- tests Stage 1's word segmentation."
+    },
+    {
+        "id": "split_word_1",
+        "category": "segmentation",
+        "input": "The stu dent sub mit ted the re port on time.",
+        "expected": "The student submitted the report on time.",
+        "notes": "Wrongly split words. KNOWN LIMITATION per the script's own docstring -- expect this one to likely fail or partially fail; that's expected, not a surprise."
+    },
+    {
+        "id": "no_change_1",
+        "category": "over_correction_check",
+        "input": "The results were consistent across all three trials we conducted.",
+        "expected": "The results were consistent across all three trials we conducted.",
+        "notes": "Already fully correct -- nothing should change. Tests for over-correction."
+    },
+    {
+        "id": "no_change_2",
+        "category": "over_correction_check",
+        "input": "Our methodology integrates both quantitative and qualitative analysis.",
+        "expected": "Our methodology integrates both quantitative and qualitative analysis.",
+        "notes": "Already correct, includes the word 'integrates' which was previously seen being wrongly changed to 'integrated' in manual testing -- direct regression check for that exact bug."
+    },
+    {
+        "id": "no_change_3",
+        "category": "over_correction_check",
+        "input": "She decided to travel alone after finishing her degree.",
+        "expected": "She decided to travel alone after finishing her degree.",
+        "notes": "Already correct, plain sentence with no domain vocab. Baseline over-correction check."
+    },
+    {
+        "id": "typo_multi_1",
+        "category": "common_typo",
+        "input": "Our reserach shows taht the resutls are statisically significant.",
+        "expected": "Our research shows that the results are statistically significant.",
+        "notes": "Multiple typos in a short academic-style sentence."
+    },
+    {
+        "id": "typo_multi_2",
+        "category": "common_typo",
+        "input": "He forgott to save the file before the compter crashed.",
+        "expected": "He forgot to save the file before the computer crashed.",
+        "notes": "Multiple typos."
+    },
+    {
+        "id": "real_word_error_3",
+        "category": "real_word_error",
+        "input": "The two teams complimented each other's strengths well.",
+        "expected": "The two teams complemented each other's strengths well.",
+        "notes": "complimented/complemented -- classic real-word confusion pair, both are valid dictionary words."
+    },
+    {
+        "id": "real_word_error_4",
+        "category": "real_word_error",
+        "input": "Their going to present the findings tomorrow.",
+        "expected": "They're going to present the findings tomorrow.",
+        "notes": "their/they're -- common real-word confusion. May be hard since 'Their' is capitalized/sentence-initial."
+    },
+    {
+        "id": "domain_vocab_5",
+        "category": "domain_vocab",
+        "input": "The json response was parsed and stored in the sql database.",
+        "expected": "The JSON response was parsed and stored in the SQL database.",
+        "notes": "Two short acronym-style vocab terms in one sentence, both should be uppercased."
+    },
+    {
+        "id": "punctuation_1",
+        "category": "common_typo",
+        "input": "Is the data acurate, and hav we validated it propperly?",
+        "expected": "Is the data accurate, and have we validated it properly?",
+        "notes": "Typos combined with a question mark -- checks punctuation is preserved through both stages."
+    },
+    {
+        "id": "long_sentence_1",
+        "category": "common_typo",
+        "input": "Aftr reviewing the initail draft, we noticed several inconsistancies in the methodolgy section that needed adressing before submision.",
+        "expected": "After reviewing the initial draft, we noticed several inconsistencies in the methodology section that needed addressing before submission.",
+        "notes": "Longer sentence, multiple typos spread throughout -- stress test for the pipeline on realistic paragraph-length OCR-style text."
+    }
+]
