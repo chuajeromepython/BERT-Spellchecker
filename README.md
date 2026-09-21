@@ -172,14 +172,52 @@ The model that ships with this repo was fine-tuned on a corpus of college-level 
 
 ---
 
-## 10. Testing accuracy and reporting issues
+## 10. Working on accuracy
 
-Worth trying a sentence that mixes common typos with project-specific vocabulary (e.g. system/tool names that aren't standard English words) to see how the corrector handles both. Things to watch for:
+If you're improving how well the corrector performs (rather than setting up the project for the first time), there's a dedicated test harness in `accuracy_tests/` — a fixed set of sentences with known-correct answers, plus a script that scores the pipeline against them. This turns "does it seem better?" into an actual number you can compare before and after a change.
 
-- **Typos should get fixed** — check both the SymSpell stage and the final BERT-reranked stage.
-- **Domain-specific terms should usually survive unchanged** — if they're getting "corrected" into something else, that's often fixable by adding them to the custom vocabulary list in `BERT-spellchecker.py`, without needing to retrain anything.
-- **Watch for over-correction** — words that were already correct getting changed anyway.
-- **Casing may not be preserved** on unusual mixed-case terms, since the underlying model lowercases all text internally.
+**Steps:**
+
+1. Make sure you've completed Sections 1–5 above first (Python, Git LFS, the project cloned, packages installed) — the test harness runs the real pipeline, so everything it depends on needs to already be working.
+
+2. Run the baseline test:
+   ```
+   cd accuracy_tests
+   python run_accuracy_tests.py
+   ```
+   This loads the model (same startup messages as running `BERT-spellchecker.py` directly), runs all 20 test sentences through both stages, and prints a result for each one.
+
+3. **Read the report.** Each case is marked:
+   - `PASS` — output matches exactly, including punctuation.
+   - `PASS*` — every word is correct; only punctuation/whitespace differs. (Punctuation loss is a known, separate behavior of Stage 1 — see the note the script prints — not a spelling-correction failure.)
+   - `CLOSE` — mostly right, a small number of words differ.
+   - `FAIL` — meaningfully wrong. These are the ones worth digging into.
+
+   For each `FAIL` or `CLOSE` case, the script prints exactly which words differ (`-> expected [...] but got [...]`), so you don't have to eyeball the full sentence to spot the problem.
+
+4. **Pick one `FAIL` case and investigate why.** Common causes and where to look:
+   - Wrong word chosen for a typo → `SYMSPELL_MAX_EDIT_DIST` or the candidate-ranking logic in `BERT-spellchecker.py`.
+   - A domain term getting "corrected" into something else → add it to `CUSTOM_VOCAB` in `BERT-spellchecker.py`.
+   - An already-correct word getting changed anyway (over-correction) → look at `rerank_line_with_bert()` in `BERT-spellchecker.py`.
+   - The model seems to consistently misunderstand domain-specific phrasing (not a single parameter issue) → may need more/better fine-tuning data instead — see Section 9.
+
+5. **Make one change at a time**, then re-run:
+   ```
+   python run_accuracy_tests.py
+   ```
+   The script automatically compares this run against your previous one and prints the score difference, so you'll immediately see whether that specific change actually helped, hurt, or did nothing.
+
+6. **Repeat** — pick the next `FAIL`/`CLOSE` case, change one thing, re-run, compare. Avoid changing multiple things between runs; if the score moves, you want to know which change caused it.
+
+7. If you want to add a new test case (e.g. a real failure you found while using the tool normally), add it to `accuracy_tests/test_cases.json` following the same format as the existing entries (`id`, `category`, `input`, `expected`, `notes`), then re-run to include it going forward.
+
+8. When you're done for the session, push your changes:
+   ```
+   git add BERT-spellchecker.py accuracy_tests/test_cases.json
+   git commit -m "Describe what you changed and why"
+   git push origin main
+   ```
+   Note: `accuracy_tests/results/` (the saved score history) is intentionally excluded from Git via `.gitignore` — it's personal run history, not something that needs to be shared.
 
 ---
 
