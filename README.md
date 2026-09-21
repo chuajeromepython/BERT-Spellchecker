@@ -85,16 +85,16 @@ If `pip` gives an error saying it's not recognized, try `pip3` or `python -m pip
 python BERT-spellchecker.py
 ```
 
-**The first time you run it**, you need an internet connection — it will automatically download the base BERT language model and cache it locally. This only happens once; after that it's cached and works offline.
+**No internet connection is needed to run this script**, since the fine-tuned model (`finetuned-bert-spellchecker/`) ships with the repo via Git LFS — the script loads it entirely from local files. (The only time this script needs internet is if that folder is ever missing and it has to fall back to downloading the stock `bert-base-uncased` model from Hugging Face — see below.)
 
-You'll see some loading messages first. If the fine-tuned model (`finetuned-bert-spellchecker/`) is present — which it will be, since it comes with the repo via Git LFS — you'll see:
+You'll see some loading messages first. Normally, since the fine-tuned model comes with the repo, you'll see:
 
 ```
 Loading SymSpell dictionary (unigram + bigram)...
 Loading fine-tuned BERT from .../finetuned-bert-spellchecker for contextual scoring...
 ```
 
-If that folder is ever missing (e.g. you're working from a copy that intentionally excluded it), the script falls back automatically to the stock model instead:
+If that folder is ever missing (e.g. you're working from a copy that intentionally excluded it), the script falls back automatically to the stock model instead — and in that case only, it needs internet on first run to download it, then caches it locally for offline use after that:
 
 ```
 Loading SymSpell dictionary (unigram + bigram)...
@@ -237,7 +237,7 @@ python BERT-spellchecker.py
 | `python` / `pip` not recognized | Try `python3` / `pip3`, or reinstall Python and check "Add to PATH" |
 | Packages installed but script still can't find them (`ModuleNotFoundError`) | `python` and `pip` may point to different Python installs. Check with `python -c "import sys; print(sys.executable)"` and `pip -V` — if the paths differ, use `python -m pip install ...` instead of plain `pip install ...` |
 | Install takes a long time | Normal — `torch` is a large package |
-| First run needs internet | Expected — it downloads the base BERT model once and caches it |
+| First run needs internet (only if the fine-tuned model folder is missing) | Expected in that case only — it falls back to downloading the stock BERT model once and caches it |
 | Script seems to hang after loading | It's likely just processing; larger text takes longer |
 | Clone is very slow, or only downloads small placeholder files | Make sure Git LFS is installed (`git lfs install`) *before* cloning — see Section 2. Without it, you'll get tiny LFS pointer files instead of the real model |
 | Clone/checkout errors mentioning "smudge filter lfs failed" or "LFS: Authorization error" | Usually means Git LFS isn't installed/initialized on your machine, or a network/firewall is blocking GitHub's LFS storage host. Confirm `git lfs install` has been run, then retry the clone |
