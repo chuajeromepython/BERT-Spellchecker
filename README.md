@@ -37,15 +37,23 @@ python --version
 
 You should see something like `Python 3.11.x`. If that command isn't recognized, try `python3 --version` instead.
 
-## 2. Install Git (if not already installed)
+## 2. Install Git and Git LFS
 
-Check with:
+Check Git is installed:
 
 ```
 git --version
 ```
 
 If it's not found, download it from [git-scm.com](https://git-scm.com/downloads) and install with default options.
+
+This project also ships a fine-tuned BERT model (a few hundred MB) stored using **Git LFS** (Large File Storage), since GitHub blocks regular files over 100MB. You need Git LFS installed once per machine, or cloning will fail or only download placeholder files instead of the real model:
+
+1. Download the installer from [git-lfs.com](https://git-lfs.com/), or on Windows with winget: `winget install GitHub.GitLFS`
+2. Then run, once:
+```
+git lfs install
+```
 
 ## 3. Download the project
 
@@ -56,17 +64,20 @@ git clone https://github.com/chuajeromepython/BERT-Spellchecker.git
 cd BERT-Spellchecker
 ```
 
+Because of the Git LFS setup above, this clone will also download the fine-tuned model — expect it to take longer than a typical small-repo clone, since it's pulling several hundred MB.
+
 ## 4. Install the required packages
 
 Still in that folder, run:
 
 ```
 pip install -r requirements.txt
+pip install accelerate
 ```
 
-This installs three packages: `symspellpy`, `transformers`, and `torch`. It may take a few minutes — `torch` in particular is a large download.
+This installs `symspellpy`, `transformers`, and `torch` from requirements.txt, plus `accelerate` (needed only if you plan to fine-tune the model yourself — see Section 9 — but harmless to install either way). It may take a few minutes — `torch` in particular is a large download.
 
-If `pip` gives an error saying it's not recognized, try `pip3` or `python -m pip install -r requirements.txt` instead.
+If `pip` gives an error saying it's not recognized, try `pip3` or `python -m pip install -r requirements.txt` instead. If packages install successfully but the script still can't find them, your `python` and `pip` commands may point to two different Python installations on your machine — check with `python -c "import sys; print(sys.executable)"` and `pip -V`, and if the paths differ, install using `python -m pip install ...` instead of plain `pip install ...`.
 
 ## 5. Run the script
 
@@ -74,13 +85,21 @@ If `pip` gives an error saying it's not recognized, try `pip3` or `python -m pip
 python BERT-spellchecker.py
 ```
 
-**The first time you run it**, you need an internet connection — it will automatically download the BERT language model (a few hundred MB). This only happens once; after that it's cached and works offline.
+**The first time you run it**, you need an internet connection — it will automatically download the base BERT language model and cache it locally. This only happens once; after that it's cached and works offline.
 
-You'll see some loading messages first:
+You'll see some loading messages first. If the fine-tuned model (`finetuned-bert-spellchecker/`) is present — which it will be, since it comes with the repo via Git LFS — you'll see:
+
+```
+Loading SymSpell dictionary (unigram + bigram)...
+Loading fine-tuned BERT from .../finetuned-bert-spellchecker for contextual scoring...
+```
+
+If that folder is ever missing (e.g. you're working from a copy that intentionally excluded it), the script falls back automatically to the stock model instead:
 
 ```
 Loading SymSpell dictionary (unigram + bigram)...
 Loading BERT (bert-base-uncased) for contextual scoring...
+(No fine-tuned model found -- run finetune_bert.py to train one on your data.)
 ```
 
 ## 6. Enter your text
@@ -128,6 +147,42 @@ Save corrected text to a file? (y/n):
 
 ---
 
+## 9. Fine-tuning on your own data (optional)
+
+The model that ships with this repo was fine-tuned on a corpus of college-level essays. If you want to improve it further with your own domain-specific text, you don't need error/correct pairs — just clean, correctly-spelled text similar to what you'll actually be correcting. BERT is used here purely as a masked-word scorer, so continuing its training on domain text is enough to teach it that domain's vocabulary and phrasing.
+
+**Steps:**
+
+1. Put `.txt` files of clean, correct text into `finetune_data/raw/` (any filenames).
+2. Prepare the training data:
+   ```
+   python prepare_finetune_data.py
+   ```
+   This reads everything in `finetune_data/raw/`, cleans and chunks it, and writes `finetune_data/train.txt` and `finetune_data/val.txt`.
+3. Run the actual fine-tuning:
+   ```
+   python finetune_bert.py
+   ```
+   This is the slow step — expect roughly 1–2 hours on a CPU-only machine, depending on how much data you have. It prints progress per step, plus a loss number (should trend downward) and an eval loss at the end of each epoch.
+4. Once done, it saves the result to `finetuned-bert-spellchecker/`, which `BERT-spellchecker.py` will automatically use on its next run — no code changes needed.
+
+**Note on training checkpoints:** while training, the script also writes intermediate checkpoints to `finetuned-bert-spellchecker/checkpoints/`. These are only needed if training crashes and you want to resume — once training finishes successfully, that subfolder is safe to delete (it can be several GB, and `.gitignore` already excludes it from being committed).
+
+**If you retrain and want to share the new model:** commit and push as usual — `.gitattributes` already routes `finetuned-bert-spellchecker/` through Git LFS, so no extra setup is needed on your end. Anyone pulling the repo afterward just needs Git LFS installed (Section 2) to get the new weights automatically.
+
+---
+
+## 10. Testing accuracy and reporting issues
+
+Worth trying a sentence that mixes common typos with project-specific vocabulary (e.g. system/tool names that aren't standard English words) to see how the corrector handles both. Things to watch for:
+
+- **Typos should get fixed** — check both the SymSpell stage and the final BERT-reranked stage.
+- **Domain-specific terms should usually survive unchanged** — if they're getting "corrected" into something else, that's often fixable by adding them to the custom vocabulary list in `BERT-spellchecker.py`, without needing to retrain anything.
+- **Watch for over-correction** — words that were already correct getting changed anyway.
+- **Casing may not be preserved** on unusual mixed-case terms, since the underlying model lowercases all text internally.
+
+---
+
 ## Running it again later
 
 You don't need to reinstall anything. Just open a terminal, go back into the folder, and run:
@@ -142,6 +197,11 @@ python BERT-spellchecker.py
 | Problem | Fix |
 |---|---|
 | `python` / `pip` not recognized | Try `python3` / `pip3`, or reinstall Python and check "Add to PATH" |
+| Packages installed but script still can't find them (`ModuleNotFoundError`) | `python` and `pip` may point to different Python installs. Check with `python -c "import sys; print(sys.executable)"` and `pip -V` — if the paths differ, use `python -m pip install ...` instead of plain `pip install ...` |
 | Install takes a long time | Normal — `torch` is a large package |
-| First run needs internet | Expected — it downloads the BERT model once |
+| First run needs internet | Expected — it downloads the base BERT model once and caches it |
 | Script seems to hang after loading | It's likely just processing; larger text takes longer |
+| Clone is very slow, or only downloads small placeholder files | Make sure Git LFS is installed (`git lfs install`) *before* cloning — see Section 2. Without it, you'll get tiny LFS pointer files instead of the real model |
+| Clone/checkout errors mentioning "smudge filter lfs failed" or "LFS: Authorization error" | Usually means Git LFS isn't installed/initialized on your machine, or a network/firewall is blocking GitHub's LFS storage host. Confirm `git lfs install` has been run, then retry the clone |
+| `finetune_bert.py` fails with an argument error on `TrainingArguments` | Some `transformers` versions have removed older arguments (e.g. `overwrite_output_dir`). If you hit this, it usually means the script needs a small update for your installed version — check what argument is unrecognized and remove/rename it |
+| `git push` fails or hangs on a large commit | The fine-tuned model is large — make sure it's being tracked via Git LFS (`git lfs track "finetuned-bert-spellchecker/**"`) rather than committed as a normal file, or GitHub will reject anything over 100MB |
