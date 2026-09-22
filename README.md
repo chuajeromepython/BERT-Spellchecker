@@ -149,7 +149,7 @@ Save corrected text to a file? (y/n):
 
 ## 9. Fine-tuning on your own data (optional)
 
-The model that ships with this repo was fine-tuned on a corpus of college-level essays. If you want to improve it further with your own domain-specific text, you don't need error/correct pairs — just clean, correctly-spelled text similar to what you'll actually be correcting. BERT is used here purely as a masked-word scorer, so continuing its training on domain text is enough to teach it that domain's vocabulary and phrasing.
+The model that ships with this repo was fine-tuned on the [TU Darmstadt Argument Annotated Essays corpus](https://tudatalib.ulb.tu-darmstadt.de/handle/tudatalib/2422), a collection of college-level argumentative essays. If you want to improve it further with your own domain-specific text, you don't need error/correct pairs — just clean, correctly-spelled text similar to what you'll actually be correcting. BERT is used here purely as a masked-word scorer, so continuing its training on domain text is enough to teach it that domain's vocabulary and phrasing.
 
 **Steps:**
 
