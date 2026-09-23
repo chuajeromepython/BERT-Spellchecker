@@ -1,0 +1,384 @@
+{
+  "summary": {
+    "timestamp": "20260921T053639Z",
+    "exact_matches": 0,
+    "total_cases": 20,
+    "exact_match_pct": 0.0,
+    "avg_word_match_pct": 91.9
+  },
+  "results": [
+    {
+      "id": "typo_basic_1",
+      "category": "common_typo",
+      "notes": "Plain typos only, no domain vocab, no ambiguity -- should be easy.",
+      "input": "The systm intgrates wtih the databse to manage studnet records.",
+      "expected": "The system integrates with the database to manage student records.",
+      "stage1_output": "The system integrates with the database to manage student records",
+      "final_output": "The system integrated with the database to manage student records",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "integrates"
+          ],
+          "got": [
+            "integrated"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "typo_basic_2",
+      "category": "common_typo",
+      "notes": "Plain typos only.",
+      "input": "Plese chekc the atatched fiel for erors before submiting.",
+      "expected": "Please check the attached file for errors before submitting.",
+      "stage1_output": "Please check the attached file for errors before submitting",
+      "final_output": "Please check the attached file for errors before submitting",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "real_word_error_1",
+      "category": "real_word_error",
+      "notes": "Known tricky case: 'deploid' is edit-distance-close to the real word 'diploid', not just 'deployed'. Tests whether Stage 2 recovers the intended word.",
+      "input": "The team deploid it using the new server.",
+      "expected": "The team deployed it using the new server.",
+      "stage1_output": "The team diploid it using the new server",
+      "final_output": "The team deployed it using the new server",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "real_word_error_2",
+      "category": "real_word_error",
+      "notes": "'weather' is a real, correctly-spelled word -- SymSpell alone won't flag it. Pure Stage 2 test.",
+      "input": "She wondered weather the plan would succeed.",
+      "expected": "She wondered whether the plan would succeed.",
+      "stage1_output": "She wondered weather the plan would succeed",
+      "final_output": "She wondered weather the plan would succeed",
+      "exact_match": false,
+      "word_match_pct": 85.7,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "whether"
+          ],
+          "got": [
+            "weather"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_1",
+      "category": "domain_vocab",
+      "notes": "Domain terms should survive; note iStar is expected to come out as ISTAR (all caps) -- known casing behavior, not a failure.",
+      "input": "The STARS systm intgrates wtih iStar to manage studnet records.",
+      "expected": "The STARS system integrates with ISTAR to manage student records.",
+      "stage1_output": "The STARS system integrates with ISTAR to manage student records",
+      "final_output": "The STARS system integrated with ISTAR to manage student records",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "integrates"
+          ],
+          "got": [
+            "integrated"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_2",
+      "category": "domain_vocab",
+      "notes": "Combines the deploid ambiguity with a domain term (Xampp) in the same sentence.",
+      "input": "We deploid it using Xampp for locl testing.",
+      "expected": "We deployed it using XAMPP for local testing.",
+      "stage1_output": "We diploid it using XAMPP for local testing",
+      "final_output": "We deploy it using XAMPP for local testing",
+      "exact_match": false,
+      "word_match_pct": 87.5,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "deployed"
+          ],
+          "got": [
+            "deploy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_3",
+      "category": "domain_vocab",
+      "notes": "php is <=6 chars so should be force-uppercased; laravel (7 chars) and postman (not in vocab) should NOT be.",
+      "input": "The API was built with php and laravel, and tested using postman.",
+      "expected": "The API was built with PHP and laravel, and tested using postman.",
+      "stage1_output": "The API was built with PHP and laravel and tested using postman",
+      "final_output": "The API was built with PHP and laravel and tested using postman",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "domain_vocab_4",
+      "category": "domain_vocab",
+      "notes": "paddleocr (9 chars) stays lowercase; trocr and github (both <=6 chars) get uppercased -- the casing pass applies to every matching vocab token in the sentence, not just ones Stage 1 changed.",
+      "input": "We used paddleocr and trocr to extract text before running it through github actions.",
+      "expected": "We used paddleocr and TROCR to extract text before running it through GITHUB actions.",
+      "stage1_output": "We used paddleocr and TROCR to extract text before running it through GITHUB actions",
+      "final_output": "We used paddleocr and TROCR to extract text before running it through GITHUB actions",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "merged_word_1",
+      "category": "segmentation",
+      "notes": "Merged/joined words -- tests Stage 1's word segmentation.",
+      "input": "Pleasesubmit yourassignment beforethe deadline.",
+      "expected": "Please submit your assignment before the deadline.",
+      "stage1_output": "Please submit your assignment before the deadline",
+      "final_output": "Please submit your assignment before the deadline",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "split_word_1",
+      "category": "segmentation",
+      "notes": "Wrongly split words. KNOWN LIMITATION per the script's own docstring -- expect this one to likely fail or partially fail; that's expected, not a surprise.",
+      "input": "The stu dent sub mit ted the re port on time.",
+      "expected": "The student submitted the report on time.",
+      "stage1_output": "The stu dent submit ted the re port on time",
+      "final_output": "The stu dent submit ted the re port on time",
+      "exact_match": false,
+      "word_match_pct": 57.1,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "student",
+            "submitted"
+          ],
+          "got": [
+            "stu",
+            "dent",
+            "submit",
+            "ted"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "report"
+          ],
+          "got": [
+            "re",
+            "port"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "no_change_1",
+      "category": "over_correction_check",
+      "notes": "Already fully correct -- nothing should change. Tests for over-correction.",
+      "input": "The results were consistent across all three trials we conducted.",
+      "expected": "The results were consistent across all three trials we conducted.",
+      "stage1_output": "The results were consistent across all three trials we conducted",
+      "final_output": "The results were consistent across all three trials we conducted",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "no_change_2",
+      "category": "over_correction_check",
+      "notes": "Already correct, includes the word 'integrates' which was previously seen being wrongly changed to 'integrated' in manual testing -- direct regression check for that exact bug.",
+      "input": "Our methodology integrates both quantitative and qualitative analysis.",
+      "expected": "Our methodology integrates both quantitative and qualitative analysis.",
+      "stage1_output": "Our methodology integrates both quantitative and qualitative analysis",
+      "final_output": "Our methodology integrates both quantitative and qualitative analysis",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "no_change_3",
+      "category": "over_correction_check",
+      "notes": "Already correct, plain sentence with no domain vocab. Baseline over-correction check.",
+      "input": "She decided to travel alone after finishing her degree.",
+      "expected": "She decided to travel alone after finishing her degree.",
+      "stage1_output": "She decided to travel alone after finishing her degree",
+      "final_output": "She decided to travel alone after finishing her degree",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "typo_multi_1",
+      "category": "common_typo",
+      "notes": "Multiple typos in a short academic-style sentence.",
+      "input": "Our reserach shows taht the resutls are statisically significant.",
+      "expected": "Our research shows that the results are statistically significant.",
+      "stage1_output": "Our research shows that the results are statistically significant",
+      "final_output": "Our research shows that the results are statistical significant",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "statistically"
+          ],
+          "got": [
+            "statistical"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "typo_multi_2",
+      "category": "common_typo",
+      "notes": "Multiple typos.",
+      "input": "He forgott to save the file before the compter crashed.",
+      "expected": "He forgot to save the file before the computer crashed.",
+      "stage1_output": "He forgot to save the file before the computer crashed",
+      "final_output": "He forgot to save the file before the computer crashed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "real_word_error_3",
+      "category": "real_word_error",
+      "notes": "complimented/complemented -- classic real-word confusion pair, both are valid dictionary words.",
+      "input": "The two teams complimented each other's strengths well.",
+      "expected": "The two teams complemented each other's strengths well.",
+      "stage1_output": "The two teams complimented each others strengths well",
+      "final_output": "The two teams complimented each other strengths well",
+      "exact_match": false,
+      "word_match_pct": 75.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "complemented"
+          ],
+          "got": [
+            "complimented"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "other's"
+          ],
+          "got": [
+            "other"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "real_word_error_4",
+      "category": "real_word_error",
+      "notes": "their/they're -- common real-word confusion. May be hard since 'Their' is capitalized/sentence-initial.",
+      "input": "Their going to present the findings tomorrow.",
+      "expected": "They're going to present the findings tomorrow.",
+      "stage1_output": "Their going to present the findings tomorrow",
+      "final_output": "Their going to present the findings tomorrow",
+      "exact_match": false,
+      "word_match_pct": 85.7,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "they're"
+          ],
+          "got": [
+            "their"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_5",
+      "category": "domain_vocab",
+      "notes": "Two short acronym-style vocab terms in one sentence, both should be uppercased.",
+      "input": "The json response was parsed and stored in the sql database.",
+      "expected": "The JSON response was parsed and stored in the SQL database.",
+      "stage1_output": "The JSON response was parsed and stored in the SQL database",
+      "final_output": "The JSON response was parsed and stored in the SQL database",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "punctuation_1",
+      "category": "common_typo",
+      "notes": "Typos combined with a question mark -- checks punctuation is preserved through both stages.",
+      "input": "Is the data acurate, and hav we validated it propperly?",
+      "expected": "Is the data accurate, and have we validated it properly?",
+      "stage1_output": "Is the data accurate and have we validated it properly",
+      "final_output": "Is the data accurate and have we validated it proper",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "properly"
+          ],
+          "got": [
+            "proper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "long_sentence_1",
+      "category": "common_typo",
+      "notes": "Longer sentence, multiple typos spread throughout -- stress test for the pipeline on realistic paragraph-length OCR-style text.",
+      "input": "Aftr reviewing the initail draft, we noticed several inconsistancies in the methodolgy section that needed adressing before submision.",
+      "expected": "After reviewing the initial draft, we noticed several inconsistencies in the methodology section that needed addressing before submission.",
+      "stage1_output": "After reviewing the initial draft we noticed several inconsistencies in the methodology section that needed a dressing before submission",
+      "final_output": "After reviewing the initial draft we noticed several inconsistencies in the mythology section that needed a dressing before submission",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "methodology"
+          ],
+          "got": [
+            "mythology"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "addressing"
+          ],
+          "got": [
+            "a",
+            "dressing"
+          ]
+        }
+      ]
+    }
+  ]
+}
