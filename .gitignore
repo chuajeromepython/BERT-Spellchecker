@@ -1,1 +1,3 @@
 finetuned-bert-spellchecker/checkpoints/
+.venv/
+__pycache__/
