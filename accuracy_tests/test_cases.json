@@ -138,5 +138,485 @@
         "input": "Aftr reviewing the initail draft, we noticed several inconsistancies in the methodolgy section that needed adressing before submision.",
         "expected": "After reviewing the initial draft, we noticed several inconsistencies in the methodology section that needed addressing before submission.",
         "notes": "Longer sentence, multiple typos spread throughout -- stress test for the pipeline on realistic paragraph-length OCR-style text."
+    },
+    {
+        "id": "syn_ocr_char_confusion_1",
+        "category": "ocr_char_confusion",
+        "input": "He explained the problem clearly and auswered cvery questlon.",
+        "expected": "He explained the problem clearly and answered every question.",
+        "notes": "Synthetic ocr_char_confusion; affected: answered, every, question",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_2",
+        "category": "ocr_char_confusion",
+        "input": "It is important to hack up yonr flles before any update.",
+        "expected": "It is important to back up your files before any update.",
+        "notes": "Synthetic ocr_char_confusion; affected: back, your, files",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_1",
+        "category": "ocr_dropped_letter",
+        "input": "They comared both mthods and cose the faster approach.",
+        "expected": "They compared both methods and chose the faster approach.",
+        "notes": "Synthetic ocr_dropped_letter; affected: compared, methods, chose",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_extra_letter_1",
+        "category": "ocr_extra_letter",
+        "input": "It is important to back up your files bbefore any update.",
+        "expected": "It is important to back up your files before any update.",
+        "notes": "Synthetic ocr_extra_letter; affected: before",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_merge_1",
+        "category": "ocr_merge",
+        "input": "The instructorgave detailed feedback on every submitted essay.",
+        "expected": "The instructor gave detailed feedback on every submitted essay.",
+        "notes": "Synthetic ocr_merge; affected: instructorgave",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_split_1",
+        "category": "ocr_split",
+        "input": "Their research focuses on impro ving the accuracy of scanning tools.",
+        "expected": "Their research focuses on improving the accuracy of scanning tools.",
+        "notes": "Synthetic ocr_split; affected: improving",
+        "split": "dev"
+    },
+    {
+        "id": "syn_over_correction_check_1",
+        "category": "over_correction_check",
+        "input": "We tested the application on three different devices yesterday.",
+        "expected": "We tested the application on three different devices yesterday.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_3",
+        "category": "ocr_char_confusion",
+        "input": "After iunch, the graup returned to the unfinished diogram.",
+        "expected": "After lunch, the group returned to the unfinished diagram.",
+        "notes": "Synthetic ocr_char_confusion; affected: group, lunch, diagram",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_char_confusion_4",
+        "category": "ocr_char_confusion",
+        "input": "She walked to the library to retum the books she borrowed.",
+        "expected": "She walked to the library to return the books she borrowed.",
+        "notes": "Synthetic ocr_char_confusion; affected: return",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_2",
+        "category": "ocr_dropped_letter",
+        "input": "The instrctor gave detailed feedback on every submitted essay.",
+        "expected": "The instructor gave detailed feedback on every submitted essay.",
+        "notes": "Synthetic ocr_dropped_letter; affected: instructor",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_extra_letter_2",
+        "category": "ocr_extra_letter",
+        "input": "She walked to the library to return the bookks she borrowed.",
+        "expected": "She walked to the library to return the books she borrowed.",
+        "notes": "Synthetic ocr_extra_letter; affected: books",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_merge_2",
+        "category": "ocr_merge",
+        "input": "The instructor gave detailed feedbackon every submitted essay.",
+        "expected": "The instructor gave detailed feedback on every submitted essay.",
+        "notes": "Synthetic ocr_merge; affected: feedbackon",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_split_2",
+        "category": "ocr_split",
+        "input": "The child ren watched the rain from the window all afternoon.",
+        "expected": "The children watched the rain from the window all afternoon.",
+        "notes": "Synthetic ocr_split; affected: children",
+        "split": "dev"
+    },
+    {
+        "id": "syn_over_correction_check_2",
+        "category": "over_correction_check",
+        "input": "We noticed a pattern in the errors that appeared last week.",
+        "expected": "We noticed a pattern in the errors that appeared last week.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_5",
+        "category": "ocr_char_confusion",
+        "input": "The report explains how the system handles missiug information.",
+        "expected": "The report explains how the system handles missing information.",
+        "notes": "Synthetic ocr_char_confusion; affected: missing",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_6",
+        "category": "ocr_char_confusion",
+        "input": "An errar message appeared whcn the file was too large.",
+        "expected": "An error message appeared when the file was too large.",
+        "notes": "Synthetic ocr_char_confusion; affected: error, when",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_3",
+        "category": "ocr_dropped_letter",
+        "input": "I belive the second drft is much stonger than the first.",
+        "expected": "I believe the second draft is much stronger than the first.",
+        "notes": "Synthetic ocr_dropped_letter; affected: believe, draft, stronger",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_extra_letter_3",
+        "category": "ocr_extra_letter",
+        "input": "The new policy taakes effect at the beginning of next month.",
+        "expected": "The new policy takes effect at the beginning of next month.",
+        "notes": "Synthetic ocr_extra_letter; affected: takes",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_merge_3",
+        "category": "ocr_merge",
+        "input": "It is important to back up your files before anyupdate.",
+        "expected": "It is important to back up your files before any update.",
+        "notes": "Synthetic ocr_merge; affected: anyupdate.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_split_3",
+        "category": "ocr_split",
+        "input": "She walked to the library to return the books she borr owed.",
+        "expected": "She walked to the library to return the books she borrowed.",
+        "notes": "Synthetic ocr_split; affected: borrowed",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_over_correction_check_3",
+        "category": "over_correction_check",
+        "input": "The council announced a new program to support local farmers.",
+        "expected": "The council announced a new program to support local farmers.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_7",
+        "category": "ocr_char_confusion",
+        "input": "After iunch, the group returued to the unfinished diagrom.",
+        "expected": "After lunch, the group returned to the unfinished diagram.",
+        "notes": "Synthetic ocr_char_confusion; affected: lunch, returned, diagram",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_8",
+        "category": "ocr_char_confusion",
+        "input": "He explainecl the problem clearly and answered cvery qucstion.",
+        "expected": "He explained the problem clearly and answered every question.",
+        "notes": "Synthetic ocr_char_confusion; affected: question, explained, every",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_4",
+        "category": "ocr_dropped_letter",
+        "input": "We measured the temperature every hour troughout the experiment.",
+        "expected": "We measured the temperature every hour throughout the experiment.",
+        "notes": "Synthetic ocr_dropped_letter; affected: throughout",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_extra_letter_4",
+        "category": "ocr_extra_letter",
+        "input": "The council aannounced a new program to support local faarmers.",
+        "expected": "The council announced a new program to support local farmers.",
+        "notes": "Synthetic ocr_extra_letter; affected: farmers, announced",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_merge_4",
+        "category": "ocr_merge",
+        "input": "The weatherwas cold, but the event went ahead as planned.",
+        "expected": "The weather was cold, but the event went ahead as planned.",
+        "notes": "Synthetic ocr_merge; affected: weatherwas",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_split_4",
+        "category": "ocr_split",
+        "input": "Please send the updated schedule to ever yone on the team.",
+        "expected": "Please send the updated schedule to everyone on the team.",
+        "notes": "Synthetic ocr_split; affected: everyone",
+        "split": "dev"
+    },
+    {
+        "id": "syn_over_correction_check_4",
+        "category": "over_correction_check",
+        "input": "She walked to the library to return the books she borrowed.",
+        "expected": "She walked to the library to return the books she borrowed.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_char_confusion_9",
+        "category": "ocr_char_confusion",
+        "input": "Readlng the instructions carefully would bave saved us time.",
+        "expected": "Reading the instructions carefully would have saved us time.",
+        "notes": "Synthetic ocr_char_confusion; affected: have, Reading",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_10",
+        "category": "ocr_char_confusion",
+        "input": "It is importont to back up your fiies before any update.",
+        "expected": "It is important to back up your files before any update.",
+        "notes": "Synthetic ocr_char_confusion; affected: important, files",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_5",
+        "category": "ocr_dropped_letter",
+        "input": "The company plas to open a second ofice in the city.",
+        "expected": "The company plans to open a second office in the city.",
+        "notes": "Synthetic ocr_dropped_letter; affected: office, plans",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_extra_letter_5",
+        "category": "ocr_extra_letter",
+        "input": "The chhildren watched the rrain froom the window all afternoon.",
+        "expected": "The children watched the rain from the window all afternoon.",
+        "notes": "Synthetic ocr_extra_letter; affected: from, rain, children",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_merge_5",
+        "category": "ocr_merge",
+        "input": "Shewalked to the library to return the books she borrowed.",
+        "expected": "She walked to the library to return the books she borrowed.",
+        "notes": "Synthetic ocr_merge; affected: Shewalked",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_split_5",
+        "category": "ocr_split",
+        "input": "The author desc ribes a quiet village near the mountains.",
+        "expected": "The author describes a quiet village near the mountains.",
+        "notes": "Synthetic ocr_split; affected: describes",
+        "split": "dev"
+    },
+    {
+        "id": "syn_over_correction_check_5",
+        "category": "over_correction_check",
+        "input": "The manager approved the budget after reading the summary.",
+        "expected": "The manager approved the budget after reading the summary.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_11",
+        "category": "ocr_char_confusion",
+        "input": "He fargot his password, so the aceount had to be resct.",
+        "expected": "He forgot his password, so the account had to be reset.",
+        "notes": "Synthetic ocr_char_confusion; affected: reset, forgot, account",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_char_confusion_12",
+        "category": "ocr_char_confusion",
+        "input": "The package arrived late, so the repoir was delayed agaln.",
+        "expected": "The package arrived late, so the repair was delayed again.",
+        "notes": "Synthetic ocr_char_confusion; affected: repair, again",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_6",
+        "category": "ocr_dropped_letter",
+        "input": "After lnch, the grup reurned to the unfinished diagram.",
+        "expected": "After lunch, the group returned to the unfinished diagram.",
+        "notes": "Synthetic ocr_dropped_letter; affected: group, lunch, returned",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_extra_letter_6",
+        "category": "ocr_extra_letter",
+        "input": "TThey compared booth methods and chose the faster approach.",
+        "expected": "They compared both methods and chose the faster approach.",
+        "notes": "Synthetic ocr_extra_letter; affected: both, They",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_merge_6",
+        "category": "ocr_merge",
+        "input": "She walked to the library to return thebooks she borrowed.",
+        "expected": "She walked to the library to return the books she borrowed.",
+        "notes": "Synthetic ocr_merge; affected: thebooks",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_split_6",
+        "category": "ocr_split",
+        "input": "The chi ldren watched the rain from the window all afternoon.",
+        "expected": "The children watched the rain from the window all afternoon.",
+        "notes": "Synthetic ocr_split; affected: children",
+        "split": "dev"
+    },
+    {
+        "id": "syn_over_correction_check_6",
+        "category": "over_correction_check",
+        "input": "Reading the instructions carefully would have saved us time.",
+        "expected": "Reading the instructions carefully would have saved us time.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_13",
+        "category": "ocr_char_confusion",
+        "input": "The committee reviewed the proposai beforc the end of the week.",
+        "expected": "The committee reviewed the proposal before the end of the week.",
+        "notes": "Synthetic ocr_char_confusion; affected: proposal, before",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_14",
+        "category": "ocr_char_confusion",
+        "input": "Many people prefcr working fram home on rainy days.",
+        "expected": "Many people prefer working from home on rainy days.",
+        "notes": "Synthetic ocr_char_confusion; affected: from, prefer",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_7",
+        "category": "ocr_dropped_letter",
+        "input": "Our goup decided to split the work into smaler tsks.",
+        "expected": "Our group decided to split the work into smaller tasks.",
+        "notes": "Synthetic ocr_dropped_letter; affected: smaller, group, tasks",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_extra_letter_7",
+        "category": "ocr_extra_letter",
+        "input": "She practiced the presentation until she felt coonfident.",
+        "expected": "She practiced the presentation until she felt confident.",
+        "notes": "Synthetic ocr_extra_letter; affected: confident",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_merge_7",
+        "category": "ocr_merge",
+        "input": "The councilannounced a new program to support local farmers.",
+        "expected": "The council announced a new program to support local farmers.",
+        "notes": "Synthetic ocr_merge; affected: councilannounced",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_split_7",
+        "category": "ocr_split",
+        "input": "The weather was cold, but the event went ahead as pla nned.",
+        "expected": "The weather was cold, but the event went ahead as planned.",
+        "notes": "Synthetic ocr_split; affected: planned",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_over_correction_check_7",
+        "category": "over_correction_check",
+        "input": "An error message appeared when the file was too large.",
+        "expected": "An error message appeared when the file was too large.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_15",
+        "category": "ocr_char_confusion",
+        "input": "The weather was colcl, but the event wcnt ahead as planned.",
+        "expected": "The weather was cold, but the event went ahead as planned.",
+        "notes": "Synthetic ocr_char_confusion; affected: cold, went",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_16",
+        "category": "ocr_char_confusion",
+        "input": "The mceting was moved because several people were unavailable.",
+        "expected": "The meeting was moved because several people were unavailable.",
+        "notes": "Synthetic ocr_char_confusion; affected: meeting",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_8",
+        "category": "ocr_dropped_letter",
+        "input": "After lunch, the group returned to the unfinished diagrm.",
+        "expected": "After lunch, the group returned to the unfinished diagram.",
+        "notes": "Synthetic ocr_dropped_letter; affected: diagram",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_extra_letter_8",
+        "category": "ocr_extra_letter",
+        "input": "The meeting was moved because seeveral people were unavaailable.",
+        "expected": "The meeting was moved because several people were unavailable.",
+        "notes": "Synthetic ocr_extra_letter; affected: unavailable, several",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_merge_8",
+        "category": "ocr_merge",
+        "input": "The survey showed that most users liked the simplerlayout.",
+        "expected": "The survey showed that most users liked the simpler layout.",
+        "notes": "Synthetic ocr_merge; affected: simplerlayout.",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_split_8",
+        "category": "ocr_split",
+        "input": "The old compu ter was too slow to run the program.",
+        "expected": "The old computer was too slow to run the program.",
+        "notes": "Synthetic ocr_split; affected: computer",
+        "split": "dev"
+    },
+    {
+        "id": "syn_over_correction_check_8",
+        "category": "over_correction_check",
+        "input": "The children watched the rain from the window all afternoon.",
+        "expected": "The children watched the rain from the window all afternoon.",
+        "notes": "Clean control; output should be unchanged.",
+        "split": "holdout"
+    },
+    {
+        "id": "syn_ocr_char_confusion_17",
+        "category": "ocr_char_confusion",
+        "input": "The old computer was too siow to run the program.",
+        "expected": "The old computer was too slow to run the program.",
+        "notes": "Synthetic ocr_char_confusion; affected: slow",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_char_confusion_18",
+        "category": "ocr_char_confusion",
+        "input": "He explained the problem cleariy and answercd every questiou.",
+        "expected": "He explained the problem clearly and answered every question.",
+        "notes": "Synthetic ocr_char_confusion; affected: question, clearly, answered",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_dropped_letter_9",
+        "category": "ocr_dropped_letter",
+        "input": "The meeting was moved because several peope were unavailable.",
+        "expected": "The meeting was moved because several people were unavailable.",
+        "notes": "Synthetic ocr_dropped_letter; affected: people",
+        "split": "dev"
+    },
+    {
+        "id": "syn_ocr_extra_letter_9",
+        "category": "ocr_extra_letter",
+        "input": "The manager approved the budget afteer reading the summary.",
+        "expected": "The manager approved the budget after reading the summary.",
+        "notes": "Synthetic ocr_extra_letter; affected: after",
+        "split": "holdout"
     }
 ]
