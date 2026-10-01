@@ -23,19 +23,20 @@ It runs entirely on your own computer, in a terminal — no web app, no upload. 
 
 ## 1. Install Python
 
-You need Python **3.9–3.12** (3.10 or 3.11 is safest if you're installing fresh).
+You need Python **3.9–3.12**. This project is set up and tested on **3.12**, so that's the recommended version. Newer versions (3.13+) may not be supported by every dependency yet, so stick with 3.12 if you can.
 
-1. Go to [python.org/downloads](https://www.python.org/downloads/)
+1. Go to [python.org/downloads](https://www.python.org/downloads/) and find **Python 3.12.10** (the last 3.12 release that ships a Windows installer: [python.org/downloads/release/python-31210](https://www.python.org/downloads/release/python-31210/)).
 2. Download and run the installer for your OS.
-3. **On Windows**, on the first install screen, check the box that says **"Add Python to PATH"** before clicking Install. This step is easy to miss and causes the most common setup problems.
+3. **On Windows**, you can keep the "Add python.exe to PATH" box ticked if 3.12 is your only Python. If you already have a newer Python installed (like 3.14) and want to keep it as your default, **untick** it. You don't need it, because Section 4 uses the `py` launcher to pick 3.12 for this project.
 
-To check it worked, open a terminal (Command Prompt / PowerShell / Terminal) and run:
+To check it worked, open a terminal (PowerShell / Command Prompt / Terminal) and run:
 
 ```
-python --version
+py -3.12 --version        # Windows
+python3.12 --version      # macOS / Linux
 ```
 
-You should see something like `Python 3.11.x`. If that command isn't recognized, try `python3 --version` instead.
+You should see `Python 3.12.x`. On Windows, `py -0p` lists every Python you have installed.
 
 ## 2. Install Git and Git LFS
 
@@ -66,20 +67,64 @@ cd BERT-Spellchecker
 
 Because of the Git LFS setup above, this clone will also download the fine-tuned model — expect it to take longer than a typical small-repo clone, since it's pulling several hundred MB.
 
-## 4. Install the required packages
+## 4. Set up a virtual environment and install packages
 
-Still in that folder, run:
+A **virtual environment** (venv) is a private folder of Python packages just for this project. It keeps this project's `torch` and `transformers` from clashing with anything else on your computer, and it lets you pick Python 3.12 even if your system default is a different version.
+
+Open a terminal **inside the `BERT-Spellchecker` folder** (in VS Code: open the folder, then press `` Ctrl+` ``).
+
+**Step 1: Create the venv with Python 3.12.** Always name it `.venv`, because that exact name is already excluded from Git (see the note below).
+
+| OS | Command |
+|---|---|
+| Windows | `py -3.12 -m venv .venv` |
+| macOS / Linux | `python3.12 -m venv .venv` |
+
+If `py -3.12` says Python 3.12 isn't found on Windows, run `py -0p` to see what's installed, or point to it directly (PowerShell): `& "$env:LOCALAPPDATA\Programs\Python\Python312\python.exe" -m venv .venv`
+
+**Step 2: Activate it.**
+
+| Shell | Command |
+|---|---|
+| Windows PowerShell | `.venv\Scripts\activate` |
+| Windows Command Prompt | `.venv\Scripts\activate.bat` |
+| macOS / Linux | `source .venv/bin/activate` |
+
+Your prompt should now start with `(.venv)`. If PowerShell says "running scripts is disabled", run this once and try again:
 
 ```
-pip install -r requirements.txt
-pip install accelerate
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-This installs `symspellpy`, `transformers`, and `torch` from requirements.txt, plus `accelerate` (needed only if you plan to fine-tune the model yourself — see Section 9 — but harmless to install either way). It may take a few minutes — `torch` in particular is a large download.
+**Step 3: Confirm it's Python 3.12.**
 
-If `pip` gives an error saying it's not recognized, try `pip3` or `python -m pip install -r requirements.txt` instead. If packages install successfully but the script still can't find them, your `python` and `pip` commands may point to two different Python installations on your machine — check with `python -c "import sys; print(sys.executable)"` and `pip -V`, and if the paths differ, install using `python -m pip install ...` instead of plain `pip install ...`.
+```
+python --version
+```
+
+It should print `Python 3.12.x`. While the venv is active, `python` and `pip` always mean the venv's copy, no matter what your system default is.
+
+**Step 4: Install the packages.**
+
+```
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install accelerate
+```
+
+This installs `symspellpy`, `transformers`, and `torch` from requirements.txt, plus `accelerate` (needed only if you plan to fine-tune the model yourself, see Section 9, but harmless to install either way). It may take a few minutes, since `torch` in particular is a large download. Using `python -m pip` (instead of plain `pip`) guarantees the packages go into the active venv.
+
+**Step 5 (VS Code only): Select the interpreter.** Press `Ctrl+Shift+P`, run **Python: Select Interpreter**, and choose the one marked `.venv` (Python 3.12). New VS Code terminals will then activate it automatically.
+
+**To leave the venv**, run `deactivate`.
+
+> **Git note:** the `.venv/` and `__pycache__/` folders are listed in `.gitignore`, so they are never committed or pushed. Each person creates their own venv from `requirements.txt`. If you name your venv something other than `.venv` (like `venv` or `env`), add that folder to `.gitignore` too, or Git will try to commit it. Run `git status` before committing: if it lists a huge folder you don't recognize, don't add it.
+
+---
 
 ## 5. Run the script
+
+Make sure your venv is active (you should see `(.venv)` in your prompt; if not, repeat Step 2 of Section 4), then run:
 
 ```
 python BERT-spellchecker.py
@@ -223,19 +268,24 @@ If you're improving how well the corrector performs (rather than setting up the 
 
 ## Running it again later
 
-You don't need to reinstall anything. Just open a terminal, go back into the folder, and run:
+You don't need to reinstall anything or recreate the venv. Open a terminal, go back into the folder, activate the venv, and run:
 
 ```
 cd BERT-Spellchecker
+.venv\Scripts\activate          # Windows PowerShell  (macOS/Linux: source .venv/bin/activate)
 python BERT-spellchecker.py
 ```
+
+If you pull updates that change `requirements.txt`, refresh your packages with `python -m pip install -r requirements.txt`.
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
-| `python` / `pip` not recognized | Try `python3` / `pip3`, or reinstall Python and check "Add to PATH" |
-| Packages installed but script still can't find them (`ModuleNotFoundError`) | `python` and `pip` may point to different Python installs. Check with `python -c "import sys; print(sys.executable)"` and `pip -V` — if the paths differ, use `python -m pip install ...` instead of plain `pip install ...` |
+| `python` / `pip` not recognized | On Windows use `py -3.12 ...` to create the venv, then activate it (Section 4); inside the venv, `python` always works. On macOS/Linux try `python3` / `pip3` |
+| `python --version` isn't 3.12 inside the project | The venv probably isn't active, or it was created with the wrong Python. Check your prompt for `(.venv)`. If it's active but wrong, delete the `.venv` folder and recreate it with `py -3.12 -m venv .venv` |
+| No `(.venv)` in the prompt, or activation fails with "running scripts is disabled" (PowerShell) | Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once, then activate again. Or use Command Prompt and `.venv\Scripts\activate.bat` |
+| `ModuleNotFoundError` (e.g. `No module named 'torch'`) | Almost always means the venv isn't active, or packages were installed into a different Python. Activate `.venv`, then run `python -m pip install -r requirements.txt`. Verify with `python -c "import sys; print(sys.executable)"`: the path should end in `.venv\Scripts\python.exe` |
 | Install takes a long time | Normal — `torch` is a large package |
 | First run needs internet (only if the fine-tuned model folder is missing) | Expected in that case only — it falls back to downloading the stock BERT model once and caches it |
 | Script seems to hang after loading | It's likely just processing; larger text takes longer |
@@ -243,3 +293,4 @@ python BERT-spellchecker.py
 | Clone/checkout errors mentioning "smudge filter lfs failed" or "LFS: Authorization error" | Usually means Git LFS isn't installed/initialized on your machine, or a network/firewall is blocking GitHub's LFS storage host. Confirm `git lfs install` has been run, then retry the clone |
 | `finetune_bert.py` fails with an argument error on `TrainingArguments` | Some `transformers` versions have removed older arguments (e.g. `overwrite_output_dir`). If you hit this, it usually means the script needs a small update for your installed version — check what argument is unrecognized and remove/rename it |
 | `git push` fails or hangs on a large commit | The fine-tuned model is large — make sure it's being tracked via Git LFS (`git lfs track "finetuned-bert-spellchecker/**"`) rather than committed as a normal file, or GitHub will reject anything over 100MB |
+| Git shows hundreds of untracked files (or a huge Source Control badge in VS Code) | Your venv folder isn't ignored. The default `.venv/` is already in `.gitignore`; if you named it differently, add that name to `.gitignore` |
