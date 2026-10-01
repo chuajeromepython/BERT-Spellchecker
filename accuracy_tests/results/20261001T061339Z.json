@@ -1,0 +1,33 @@
+{
+  "summary": {
+    "timestamp": "20261001T061339Z",
+    "exact_matches": 0,
+    "total_cases": 1,
+    "exact_match_pct": 0.0,
+    "avg_word_match_pct": 90.0
+  },
+  "results": [
+    {
+      "id": "typo_basic_1",
+      "category": "common_typo",
+      "notes": "Plain typos only, no domain vocab, no ambiguity -- should be easy.",
+      "input": "The systm intgrates wtih the databse to manage studnet records.",
+      "expected": "The system integrates with the database to manage student records.",
+      "stage1_output": "The system integrates with the database to manage student records",
+      "final_output": "The system integrated with the database to manage student records",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "integrates"
+          ],
+          "got": [
+            "integrated"
+          ]
+        }
+      ]
+    }
+  ]
+}

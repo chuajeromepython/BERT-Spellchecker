@@ -1,0 +1,1292 @@
+{
+  "summary": {
+    "timestamp": "20261001T060819Z",
+    "exact_matches": 0,
+    "total_cases": 80,
+    "exact_match_pct": 0.0,
+    "avg_word_match_pct": 95.5
+  },
+  "results": [
+    {
+      "id": "typo_basic_1",
+      "category": "common_typo",
+      "notes": "Plain typos only, no domain vocab, no ambiguity -- should be easy.",
+      "input": "The systm intgrates wtih the databse to manage studnet records.",
+      "expected": "The system integrates with the database to manage student records.",
+      "stage1_output": "The system integrates with the database to manage student records",
+      "final_output": "The system integrated with the database to manage student records",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "integrates"
+          ],
+          "got": [
+            "integrated"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "typo_basic_2",
+      "category": "common_typo",
+      "notes": "Plain typos only.",
+      "input": "Plese chekc the atatched fiel for erors before submiting.",
+      "expected": "Please check the attached file for errors before submitting.",
+      "stage1_output": "Please check the attached file for errors before submitting",
+      "final_output": "Please check the attached file for errors before submitting",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "real_word_error_1",
+      "category": "real_word_error",
+      "notes": "Known tricky case: 'deploid' is edit-distance-close to the real word 'diploid', not just 'deployed'. Tests whether Stage 2 recovers the intended word.",
+      "input": "The team deploid it using the new server.",
+      "expected": "The team deployed it using the new server.",
+      "stage1_output": "The team diploid it using the new server",
+      "final_output": "The team deployed it using the new server",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "real_word_error_2",
+      "category": "real_word_error",
+      "notes": "'weather' is a real, correctly-spelled word -- SymSpell alone won't flag it. Pure Stage 2 test.",
+      "input": "She wondered weather the plan would succeed.",
+      "expected": "She wondered whether the plan would succeed.",
+      "stage1_output": "She wondered weather the plan would succeed",
+      "final_output": "She wondered weather the plan would succeed",
+      "exact_match": false,
+      "word_match_pct": 85.7,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "whether"
+          ],
+          "got": [
+            "weather"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_1",
+      "category": "domain_vocab",
+      "notes": "Domain terms should survive; note iStar is expected to come out as ISTAR (all caps) -- known casing behavior, not a failure.",
+      "input": "The STARS systm intgrates wtih iStar to manage studnet records.",
+      "expected": "The STARS system integrates with ISTAR to manage student records.",
+      "stage1_output": "The STARS system integrates with ISTAR to manage student records",
+      "final_output": "The STARS system integrated with ISTAR to manage student records",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "integrates"
+          ],
+          "got": [
+            "integrated"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_2",
+      "category": "domain_vocab",
+      "notes": "Combines the deploid ambiguity with a domain term (Xampp) in the same sentence.",
+      "input": "We deploid it using Xampp for locl testing.",
+      "expected": "We deployed it using XAMPP for local testing.",
+      "stage1_output": "We diploid it using XAMPP for local testing",
+      "final_output": "We deploy it using XAMPP for local testing",
+      "exact_match": false,
+      "word_match_pct": 87.5,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "deployed"
+          ],
+          "got": [
+            "deploy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_3",
+      "category": "domain_vocab",
+      "notes": "php is <=6 chars so should be force-uppercased; laravel (7 chars) and postman (not in vocab) should NOT be.",
+      "input": "The API was built with php and laravel, and tested using postman.",
+      "expected": "The API was built with PHP and laravel, and tested using postman.",
+      "stage1_output": "The API was built with PHP and laravel and tested using postman",
+      "final_output": "The API was built with PHP and laravel and tested using postman",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "domain_vocab_4",
+      "category": "domain_vocab",
+      "notes": "paddleocr (9 chars) stays lowercase; trocr and github (both <=6 chars) get uppercased -- the casing pass applies to every matching vocab token in the sentence, not just ones Stage 1 changed.",
+      "input": "We used paddleocr and trocr to extract text before running it through github actions.",
+      "expected": "We used paddleocr and TROCR to extract text before running it through GITHUB actions.",
+      "stage1_output": "We used paddleocr and TROCR to extract text before running it through GITHUB actions",
+      "final_output": "We used paddleocr and TROCR to extract text before running it through GITHUB actions",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "merged_word_1",
+      "category": "segmentation",
+      "notes": "Merged/joined words -- tests Stage 1's word segmentation.",
+      "input": "Pleasesubmit yourassignment beforethe deadline.",
+      "expected": "Please submit your assignment before the deadline.",
+      "stage1_output": "Please submit your assignment before the deadline",
+      "final_output": "Please submit your assignment before the deadline",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "split_word_1",
+      "category": "segmentation",
+      "notes": "Wrongly split words. KNOWN LIMITATION per the script's own docstring -- expect this one to likely fail or partially fail; that's expected, not a surprise.",
+      "input": "The stu dent sub mit ted the re port on time.",
+      "expected": "The student submitted the report on time.",
+      "stage1_output": "The stu dent submit ted the re port on time",
+      "final_output": "The stu dent submit ted the re port on time",
+      "exact_match": false,
+      "word_match_pct": 57.1,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "student",
+            "submitted"
+          ],
+          "got": [
+            "stu",
+            "dent",
+            "submit",
+            "ted"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "report"
+          ],
+          "got": [
+            "re",
+            "port"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "no_change_1",
+      "category": "over_correction_check",
+      "notes": "Already fully correct -- nothing should change. Tests for over-correction.",
+      "input": "The results were consistent across all three trials we conducted.",
+      "expected": "The results were consistent across all three trials we conducted.",
+      "stage1_output": "The results were consistent across all three trials we conducted",
+      "final_output": "The results were consistent across all three trials we conducted",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "no_change_2",
+      "category": "over_correction_check",
+      "notes": "Already correct, includes the word 'integrates' which was previously seen being wrongly changed to 'integrated' in manual testing -- direct regression check for that exact bug.",
+      "input": "Our methodology integrates both quantitative and qualitative analysis.",
+      "expected": "Our methodology integrates both quantitative and qualitative analysis.",
+      "stage1_output": "Our methodology integrates both quantitative and qualitative analysis",
+      "final_output": "Our methodology integrates both quantitative and qualitative analysis",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "no_change_3",
+      "category": "over_correction_check",
+      "notes": "Already correct, plain sentence with no domain vocab. Baseline over-correction check.",
+      "input": "She decided to travel alone after finishing her degree.",
+      "expected": "She decided to travel alone after finishing her degree.",
+      "stage1_output": "She decided to travel alone after finishing her degree",
+      "final_output": "She decided to travel alone after finishing her degree",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "typo_multi_1",
+      "category": "common_typo",
+      "notes": "Multiple typos in a short academic-style sentence.",
+      "input": "Our reserach shows taht the resutls are statisically significant.",
+      "expected": "Our research shows that the results are statistically significant.",
+      "stage1_output": "Our research shows that the results are statistically significant",
+      "final_output": "Our research shows that the results are statistical significant",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "statistically"
+          ],
+          "got": [
+            "statistical"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "typo_multi_2",
+      "category": "common_typo",
+      "notes": "Multiple typos.",
+      "input": "He forgott to save the file before the compter crashed.",
+      "expected": "He forgot to save the file before the computer crashed.",
+      "stage1_output": "He forgot to save the file before the computer crashed",
+      "final_output": "He forgot to save the file before the computer crashed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "real_word_error_3",
+      "category": "real_word_error",
+      "notes": "complimented/complemented -- classic real-word confusion pair, both are valid dictionary words.",
+      "input": "The two teams complimented each other's strengths well.",
+      "expected": "The two teams complemented each other's strengths well.",
+      "stage1_output": "The two teams complimented each others strengths well",
+      "final_output": "The two teams complimented each other strengths well",
+      "exact_match": false,
+      "word_match_pct": 75.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "complemented"
+          ],
+          "got": [
+            "complimented"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "other's"
+          ],
+          "got": [
+            "other"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "real_word_error_4",
+      "category": "real_word_error",
+      "notes": "their/they're -- common real-word confusion. May be hard since 'Their' is capitalized/sentence-initial.",
+      "input": "Their going to present the findings tomorrow.",
+      "expected": "They're going to present the findings tomorrow.",
+      "stage1_output": "Their going to present the findings tomorrow",
+      "final_output": "Their going to present the findings tomorrow",
+      "exact_match": false,
+      "word_match_pct": 85.7,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "they're"
+          ],
+          "got": [
+            "their"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_vocab_5",
+      "category": "domain_vocab",
+      "notes": "Two short acronym-style vocab terms in one sentence, both should be uppercased.",
+      "input": "The json response was parsed and stored in the sql database.",
+      "expected": "The JSON response was parsed and stored in the SQL database.",
+      "stage1_output": "The JSON response was parsed and stored in the SQL database",
+      "final_output": "The JSON response was parsed and stored in the SQL database",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "punctuation_1",
+      "category": "common_typo",
+      "notes": "Typos combined with a question mark -- checks punctuation is preserved through both stages.",
+      "input": "Is the data acurate, and hav we validated it propperly?",
+      "expected": "Is the data accurate, and have we validated it properly?",
+      "stage1_output": "Is the data accurate and have we validated it properly",
+      "final_output": "Is the data accurate and have we validated it proper",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "properly"
+          ],
+          "got": [
+            "proper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "long_sentence_1",
+      "category": "common_typo",
+      "notes": "Longer sentence, multiple typos spread throughout -- stress test for the pipeline on realistic paragraph-length OCR-style text.",
+      "input": "Aftr reviewing the initail draft, we noticed several inconsistancies in the methodolgy section that needed adressing before submision.",
+      "expected": "After reviewing the initial draft, we noticed several inconsistencies in the methodology section that needed addressing before submission.",
+      "stage1_output": "After reviewing the initial draft we noticed several inconsistencies in the methodology section that needed a dressing before submission",
+      "final_output": "After reviewing the initial draft we noticed several inconsistencies in the mythology section that needed a dressing before submission",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "methodology"
+          ],
+          "got": [
+            "mythology"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "addressing"
+          ],
+          "got": [
+            "a",
+            "dressing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_char_confusion_1",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: answered, every, question",
+      "input": "He explained the problem clearly and auswered cvery questlon.",
+      "expected": "He explained the problem clearly and answered every question.",
+      "stage1_output": "He explained the problem clearly and answered very question",
+      "final_output": "He explained the problem clearly and answered every questions",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "question"
+          ],
+          "got": [
+            "questions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_char_confusion_2",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: back, your, files",
+      "input": "It is important to hack up yonr flles before any update.",
+      "expected": "It is important to back up your files before any update.",
+      "stage1_output": "It is important to hack up your files before any update",
+      "final_output": "It is important to hack up your files before any update",
+      "exact_match": false,
+      "word_match_pct": 90.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "back"
+          ],
+          "got": [
+            "hack"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_dropped_letter_1",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: compared, methods, chose",
+      "input": "They comared both mthods and cose the faster approach.",
+      "expected": "They compared both methods and chose the faster approach.",
+      "stage1_output": "They compared both methods and code the faster approach",
+      "final_output": "They compare both method and cost the faster approach",
+      "exact_match": false,
+      "word_match_pct": 66.7,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "compared"
+          ],
+          "got": [
+            "compare"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "methods"
+          ],
+          "got": [
+            "method"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "chose"
+          ],
+          "got": [
+            "cost"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_extra_letter_1",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: before",
+      "input": "It is important to back up your files bbefore any update.",
+      "expected": "It is important to back up your files before any update.",
+      "stage1_output": "It is important to back up your files before any update",
+      "final_output": "It is important to back up your files before any update",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_merge_1",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: instructorgave",
+      "input": "The instructorgave detailed feedback on every submitted essay.",
+      "expected": "The instructor gave detailed feedback on every submitted essay.",
+      "stage1_output": "The instructor gave detailed feedback on every submitted essay",
+      "final_output": "The instructor gave detailed feedback on every submitted essay",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_split_1",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: improving",
+      "input": "Their research focuses on impro ving the accuracy of scanning tools.",
+      "expected": "Their research focuses on improving the accuracy of scanning tools.",
+      "stage1_output": "Their research focuses on improving the accuracy of scanning tools",
+      "final_output": "Their research focuses on improving the accuracy of scanning tools",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_1",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "We tested the application on three different devices yesterday.",
+      "expected": "We tested the application on three different devices yesterday.",
+      "stage1_output": "We tested the application on three different devices yesterday",
+      "final_output": "We tested the application on three different devices yesterday",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_3",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: group, lunch, diagram",
+      "input": "After iunch, the graup returned to the unfinished diogram.",
+      "expected": "After lunch, the group returned to the unfinished diagram.",
+      "stage1_output": "After inch the group returned to the unfinished diagram",
+      "final_output": "After lunch the group returned to the unfinished program",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "diagram"
+          ],
+          "got": [
+            "program"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_char_confusion_4",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: return",
+      "input": "She walked to the library to retum the books she borrowed.",
+      "expected": "She walked to the library to return the books she borrowed.",
+      "stage1_output": "She walked to the library to rectum the books she borrowed",
+      "final_output": "She walked to the library to return the books she borrowed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_dropped_letter_2",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: instructor",
+      "input": "The instrctor gave detailed feedback on every submitted essay.",
+      "expected": "The instructor gave detailed feedback on every submitted essay.",
+      "stage1_output": "The instructor gave detailed feedback on every submitted essay",
+      "final_output": "The instructor gave detailed feedback on every submitted essay",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_extra_letter_2",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: books",
+      "input": "She walked to the library to return the bookks she borrowed.",
+      "expected": "She walked to the library to return the books she borrowed.",
+      "stage1_output": "She walked to the library to return the books she borrowed",
+      "final_output": "She walked to the library to return the books she borrowed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_merge_2",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: feedbackon",
+      "input": "The instructor gave detailed feedbackon every submitted essay.",
+      "expected": "The instructor gave detailed feedback on every submitted essay.",
+      "stage1_output": "The instructor gave detailed feedback on every submitted essay",
+      "final_output": "The instructor gave detailed feedback on every submitted essay",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_split_2",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: children",
+      "input": "The child ren watched the rain from the window all afternoon.",
+      "expected": "The children watched the rain from the window all afternoon.",
+      "stage1_output": "The children watched the rain from the window all afternoon",
+      "final_output": "The children watched the rain from the window all afternoon",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_2",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "We noticed a pattern in the errors that appeared last week.",
+      "expected": "We noticed a pattern in the errors that appeared last week.",
+      "stage1_output": "We noticed a pattern in the errors that appeared last week",
+      "final_output": "We noticed a pattern in the errors that appeared last week",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_5",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: missing",
+      "input": "The report explains how the system handles missiug information.",
+      "expected": "The report explains how the system handles missing information.",
+      "stage1_output": "The report explains how the system handles missing information",
+      "final_output": "The report explains how the system handles missing information",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_6",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: error, when",
+      "input": "An errar message appeared whcn the file was too large.",
+      "expected": "An error message appeared when the file was too large.",
+      "stage1_output": "An error message appeared when the file was too large",
+      "final_output": "An error message appeared when the file was too large",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_dropped_letter_3",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: believe, draft, stronger",
+      "input": "I belive the second drft is much stonger than the first.",
+      "expected": "I believe the second draft is much stronger than the first.",
+      "stage1_output": "I be live the second draft is much stronger than the first",
+      "final_output": "I be live the second gift is much longer than the first",
+      "exact_match": false,
+      "word_match_pct": 72.7,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "believe"
+          ],
+          "got": [
+            "be",
+            "live"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "draft"
+          ],
+          "got": [
+            "gift"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "stronger"
+          ],
+          "got": [
+            "longer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_extra_letter_3",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: takes",
+      "input": "The new policy taakes effect at the beginning of next month.",
+      "expected": "The new policy takes effect at the beginning of next month.",
+      "stage1_output": "The new policy takes effect at the beginning of next month",
+      "final_output": "The new policy takes effect at the beginning of next month",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_merge_3",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: anyupdate.",
+      "input": "It is important to back up your files before anyupdate.",
+      "expected": "It is important to back up your files before any update.",
+      "stage1_output": "It is important to back up your files before an update",
+      "final_output": "It is important to back up your files before an update",
+      "exact_match": false,
+      "word_match_pct": 90.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "any"
+          ],
+          "got": [
+            "an"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_split_3",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: borrowed",
+      "input": "She walked to the library to return the books she borr owed.",
+      "expected": "She walked to the library to return the books she borrowed.",
+      "stage1_output": "She walked to the library to return the books she borrowed",
+      "final_output": "She walked to the library to return the books she borrowed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_3",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "The council announced a new program to support local farmers.",
+      "expected": "The council announced a new program to support local farmers.",
+      "stage1_output": "The council announced a new program to support local farmers",
+      "final_output": "The council announced a new program to support local farmers",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_7",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: lunch, returned, diagram",
+      "input": "After iunch, the group returued to the unfinished diagrom.",
+      "expected": "After lunch, the group returned to the unfinished diagram.",
+      "stage1_output": "After inch the group returned to the unfinished diagram",
+      "final_output": "After lunch the group returned to the unfinished kingdom",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "diagram"
+          ],
+          "got": [
+            "kingdom"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_char_confusion_8",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: question, explained, every",
+      "input": "He explainecl the problem clearly and answered cvery qucstion.",
+      "expected": "He explained the problem clearly and answered every question.",
+      "stage1_output": "He explained the problem clearly and answered very question",
+      "final_output": "He explained the problem clearly and answered every questions",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "question"
+          ],
+          "got": [
+            "questions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_dropped_letter_4",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: throughout",
+      "input": "We measured the temperature every hour troughout the experiment.",
+      "expected": "We measured the temperature every hour throughout the experiment.",
+      "stage1_output": "We measured the temperature every hour throughout the experiment",
+      "final_output": "We measured the temperature every hour throughout the experiment",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_extra_letter_4",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: farmers, announced",
+      "input": "The council aannounced a new program to support local faarmers.",
+      "expected": "The council announced a new program to support local farmers.",
+      "stage1_output": "The council announced a new program to support local farmers",
+      "final_output": "The council announced a new program to support local farmers",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_merge_4",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: weatherwas",
+      "input": "The weatherwas cold, but the event went ahead as planned.",
+      "expected": "The weather was cold, but the event went ahead as planned.",
+      "stage1_output": "The weather was cold but the event went ahead as planned",
+      "final_output": "The weather was cold but the event went ahead as planned",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_split_4",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: everyone",
+      "input": "Please send the updated schedule to ever yone on the team.",
+      "expected": "Please send the updated schedule to everyone on the team.",
+      "stage1_output": "Please send the updated schedule to everyone on the team",
+      "final_output": "Please send the updated schedule to everyone on the team",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_4",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "She walked to the library to return the books she borrowed.",
+      "expected": "She walked to the library to return the books she borrowed.",
+      "stage1_output": "She walked to the library to return the books she borrowed",
+      "final_output": "She walked to the library to return the books she borrowed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_9",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: have, Reading",
+      "input": "Readlng the instructions carefully would bave saved us time.",
+      "expected": "Reading the instructions carefully would have saved us time.",
+      "stage1_output": "Reading the instructions carefully would have saved us time",
+      "final_output": "Reading the instructions carefully would have saved us time",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_10",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: important, files",
+      "input": "It is importont to back up your fiies before any update.",
+      "expected": "It is important to back up your files before any update.",
+      "stage1_output": "It is important to back up your files before any update",
+      "final_output": "It is important to back up your files before any update",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_dropped_letter_5",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: office, plans",
+      "input": "The company plas to open a second ofice in the city.",
+      "expected": "The company plans to open a second office in the city.",
+      "stage1_output": "The company plan to open a second of ice in the city",
+      "final_output": "The company plans to open a second of ice in the city",
+      "exact_match": false,
+      "word_match_pct": 90.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "office"
+          ],
+          "got": [
+            "of",
+            "ice"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_extra_letter_5",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: from, rain, children",
+      "input": "The chhildren watched the rrain froom the window all afternoon.",
+      "expected": "The children watched the rain from the window all afternoon.",
+      "stage1_output": "The children watched the brain from the window all afternoon",
+      "final_output": "The children watched the rain from the window all afternoon",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_merge_5",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: Shewalked",
+      "input": "Shewalked to the library to return the books she borrowed.",
+      "expected": "She walked to the library to return the books she borrowed.",
+      "stage1_output": "She walked to the library to return the books she borrowed",
+      "final_output": "She walked to the library to return the books she borrowed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_split_5",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: describes",
+      "input": "The author desc ribes a quiet village near the mountains.",
+      "expected": "The author describes a quiet village near the mountains.",
+      "stage1_output": "The author describes a quiet village near the mountains",
+      "final_output": "The author describes a quiet village near the mountains",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_5",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "The manager approved the budget after reading the summary.",
+      "expected": "The manager approved the budget after reading the summary.",
+      "stage1_output": "The manager approved the budget after reading the summary",
+      "final_output": "The manager approved the budget after reading the summary",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_11",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: reset, forgot, account",
+      "input": "He fargot his password, so the aceount had to be resct.",
+      "expected": "He forgot his password, so the account had to be reset.",
+      "stage1_output": "He forgot his password so the account had to be rest",
+      "final_output": "He forgot his password so the account had to be reset",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_12",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: repair, again",
+      "input": "The package arrived late, so the repoir was delayed agaln.",
+      "expected": "The package arrived late, so the repair was delayed again.",
+      "stage1_output": "The package arrived late so the repair was delayed again",
+      "final_output": "The package arrived late so the report was delayed again",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "repair"
+          ],
+          "got": [
+            "report"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_dropped_letter_6",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: group, lunch, returned",
+      "input": "After lnch, the grup reurned to the unfinished diagram.",
+      "expected": "After lunch, the group returned to the unfinished diagram.",
+      "stage1_output": "After inch the group returned to the unfinished diagram",
+      "final_output": "After lunch the group returned to the unfinished diagram",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_extra_letter_6",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: both, They",
+      "input": "TThey compared booth methods and chose the faster approach.",
+      "expected": "They compared both methods and chose the faster approach.",
+      "stage1_output": "They compared booth methods and chose the faster approach",
+      "final_output": "They compared booth methods and chose the faster approach",
+      "exact_match": false,
+      "word_match_pct": 88.9,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "both"
+          ],
+          "got": [
+            "booth"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_merge_6",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: thebooks",
+      "input": "She walked to the library to return thebooks she borrowed.",
+      "expected": "She walked to the library to return the books she borrowed.",
+      "stage1_output": "She walked to the library to return the books she borrowed",
+      "final_output": "She walked to the library to return the books she borrowed",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_split_6",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: children",
+      "input": "The chi ldren watched the rain from the window all afternoon.",
+      "expected": "The children watched the rain from the window all afternoon.",
+      "stage1_output": "The children watched the rain from the window all afternoon",
+      "final_output": "The children watched the rain from the window all afternoon",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_6",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "Reading the instructions carefully would have saved us time.",
+      "expected": "Reading the instructions carefully would have saved us time.",
+      "stage1_output": "Reading the instructions carefully would have saved us time",
+      "final_output": "Reading the instructions carefully would have saved us time",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_13",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: proposal, before",
+      "input": "The committee reviewed the proposai beforc the end of the week.",
+      "expected": "The committee reviewed the proposal before the end of the week.",
+      "stage1_output": "The committee reviewed the proposal before the end of the week",
+      "final_output": "The committee reviewed the proposal before the end of the week",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_14",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: from, prefer",
+      "input": "Many people prefcr working fram home on rainy days.",
+      "expected": "Many people prefer working from home on rainy days.",
+      "stage1_output": "Many people prefer working from home on rainy days",
+      "final_output": "Many people prefer working from home on rainy days",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_dropped_letter_7",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: smaller, group, tasks",
+      "input": "Our goup decided to split the work into smaler tsks.",
+      "expected": "Our group decided to split the work into smaller tasks.",
+      "stage1_output": "Our go up decided to split the work into smaller tasks",
+      "final_output": "Our go up decided to split the work into smaller take",
+      "exact_match": false,
+      "word_match_pct": 80.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "group"
+          ],
+          "got": [
+            "go",
+            "up"
+          ]
+        },
+        {
+          "type": "replace",
+          "expected": [
+            "tasks"
+          ],
+          "got": [
+            "take"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_extra_letter_7",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: confident",
+      "input": "She practiced the presentation until she felt coonfident.",
+      "expected": "She practiced the presentation until she felt confident.",
+      "stage1_output": "She practice the presentation until she felt confident",
+      "final_output": "She practised the presentation until she felt confident",
+      "exact_match": false,
+      "word_match_pct": 87.5,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "practiced"
+          ],
+          "got": [
+            "practised"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_merge_7",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: councilannounced",
+      "input": "The councilannounced a new program to support local farmers.",
+      "expected": "The council announced a new program to support local farmers.",
+      "stage1_output": "The council announced a new program to support local farmers",
+      "final_output": "The council announced a new program to support local farmers",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_split_7",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: planned",
+      "input": "The weather was cold, but the event went ahead as pla nned.",
+      "expected": "The weather was cold, but the event went ahead as planned.",
+      "stage1_output": "The weather was cold but the event went ahead as planned",
+      "final_output": "The weather was cold but the event went ahead as planned",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_7",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "An error message appeared when the file was too large.",
+      "expected": "An error message appeared when the file was too large.",
+      "stage1_output": "An error message appeared when the file was too large",
+      "final_output": "An error message appeared when the file was too large",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_15",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: cold, went",
+      "input": "The weather was colcl, but the event wcnt ahead as planned.",
+      "expected": "The weather was cold, but the event went ahead as planned.",
+      "stage1_output": "The weather was coll but the event want ahead as planned",
+      "final_output": "The weather was cold but the event went ahead as planned",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_16",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: meeting",
+      "input": "The mceting was moved because several people were unavailable.",
+      "expected": "The meeting was moved because several people were unavailable.",
+      "stage1_output": "The meeting was moved because several people were unavailable",
+      "final_output": "The meeting was moved because several people were unavailable",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_dropped_letter_8",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: diagram",
+      "input": "After lunch, the group returned to the unfinished diagrm.",
+      "expected": "After lunch, the group returned to the unfinished diagram.",
+      "stage1_output": "After lunch the group returned to the unfinished diagram",
+      "final_output": "After lunch the group returned to the unfinished diagram",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_extra_letter_8",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: unavailable, several",
+      "input": "The meeting was moved because seeveral people were unavaailable.",
+      "expected": "The meeting was moved because several people were unavailable.",
+      "stage1_output": "The meeting was moved because several people were unavailable",
+      "final_output": "The meeting was moved because several people were unavailable",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_merge_8",
+      "category": "ocr_merge",
+      "notes": "Synthetic ocr_merge; affected: simplerlayout.",
+      "input": "The survey showed that most users liked the simplerlayout.",
+      "expected": "The survey showed that most users liked the simpler layout.",
+      "stage1_output": "The survey showed that most users liked the simple layout",
+      "final_output": "The survey showed that most users liked the simple layout",
+      "exact_match": false,
+      "word_match_pct": 90.0,
+      "diff": [
+        {
+          "type": "replace",
+          "expected": [
+            "simpler"
+          ],
+          "got": [
+            "simple"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "syn_ocr_split_8",
+      "category": "ocr_split",
+      "notes": "Synthetic ocr_split; affected: computer",
+      "input": "The old compu ter was too slow to run the program.",
+      "expected": "The old computer was too slow to run the program.",
+      "stage1_output": "The old computer was too slow to run the program",
+      "final_output": "The old computer was too slow to run the program",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_over_correction_check_8",
+      "category": "over_correction_check",
+      "notes": "Clean control; output should be unchanged.",
+      "input": "The children watched the rain from the window all afternoon.",
+      "expected": "The children watched the rain from the window all afternoon.",
+      "stage1_output": "The children watched the rain from the window all afternoon",
+      "final_output": "The children watched the rain from the window all afternoon",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_17",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: slow",
+      "input": "The old computer was too siow to run the program.",
+      "expected": "The old computer was too slow to run the program.",
+      "stage1_output": "The old computer was too show to run the program",
+      "final_output": "The old computer was too slow to run the program",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_char_confusion_18",
+      "category": "ocr_char_confusion",
+      "notes": "Synthetic ocr_char_confusion; affected: question, clearly, answered",
+      "input": "He explained the problem cleariy and answercd every questiou.",
+      "expected": "He explained the problem clearly and answered every question.",
+      "stage1_output": "He explained the problem clearly and answered every question",
+      "final_output": "He explained the problem clearly and answered every question",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_dropped_letter_9",
+      "category": "ocr_dropped_letter",
+      "notes": "Synthetic ocr_dropped_letter; affected: people",
+      "input": "The meeting was moved because several peope were unavailable.",
+      "expected": "The meeting was moved because several people were unavailable.",
+      "stage1_output": "The meeting was moved because several people were unavailable",
+      "final_output": "The meeting was moved because several people were unavailable",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    },
+    {
+      "id": "syn_ocr_extra_letter_9",
+      "category": "ocr_extra_letter",
+      "notes": "Synthetic ocr_extra_letter; affected: after",
+      "input": "The manager approved the budget afteer reading the summary.",
+      "expected": "The manager approved the budget after reading the summary.",
+      "stage1_output": "The manager approved the budget after reading the summary",
+      "final_output": "The manager approved the budget after reading the summary",
+      "exact_match": false,
+      "word_match_pct": 100.0,
+      "diff": []
+    }
+  ]
+}

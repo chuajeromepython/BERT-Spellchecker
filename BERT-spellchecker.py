@@ -71,7 +71,7 @@ from symspellpy import SymSpell, Verbosity
 CUSTOM_VOCAB = [
     "readme", "groq", "xampp", "opencv", "php", "laravel", "api",
     "github", "python", "javascript", "html", "css", "sql", "json",
-    "vscode", "istars", "istar", "stars", "paddleocr", "trocr",
+    "vscode", "istars", "istar", "stars", "paddleocr", "trocr", "ACTSight",
 ]
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
